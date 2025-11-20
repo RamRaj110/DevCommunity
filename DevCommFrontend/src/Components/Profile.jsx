@@ -1,0 +1,117 @@
+import { FaEnvelope, FaUser, FaCalendarAlt, FaVenusMars } from "react-icons/fa";
+
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+
+const Profile = () => {
+  const user = useSelector((state)=> state.userInfo.userInfo)
+  const navigate = useNavigate();
+    if (!user) {
+    return (
+      <div className="flex justify-center mt-10 text-lg text-base-content/70">
+        Loading profile...
+      </div>
+    );
+  }
+
+  const {
+    firstName,
+    lastName,
+    email,
+    age,
+    gender,
+    about,
+    profileImg,
+    skills = [],
+    createdAt,
+    updatedAt,
+  } = user;
+
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+  const handleEditClick = () => {
+    navigate('/edit');
+  }
+
+
+  return (
+    user && <div className="max-w-lg mx-auto bg-base-300 rounded-2xl shadow-xl overflow-hidden mt-3 border border-base-200">
+
+      {/* Header gradient */}
+      <div className="bg-gradient-to-r from-primary to-secondary h-32 w-full"></div>
+
+      {/* Avatar */}
+      <div className="avatar -mt-16 flex justify-center">
+        <div className="w-32 rounded-full ring ring-base-100 ring-offset-2 shadow-md">
+          <img src={profileImg || "https://pluspng.com/img-png/png-user-icon-circled-user-icon-2240.png"} alt="profile" />
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="p-6 text-center">
+        {/* Name */}
+        <h2 className="text-2xl font-bold">
+          {firstName} {lastName}
+        </h2>
+
+        {/* Gender */}
+        <p className="text-base-content/70 flex justify-center items-center gap-2 mt-1">
+          <FaVenusMars /> {gender }
+        </p>
+         <p className="text-base-content/70 flex justify-center items-center gap-2 mt-1">
+          Age: {age}
+        </p>
+
+        {/* Email */}
+        <p className="mt-1 text-base-content/70 flex justify-center items-center gap-2">
+          <FaEnvelope className="text-primary" /> {email}
+        </p>
+
+        {/* About Section */}
+        <div className="mt-4 bg-base-200 p-3 rounded-lg shadow-inner">
+          <p className="text-base-content/80 text-sm">{about}</p>
+        </div>
+
+        {/* Skills */}
+        <div className="mt-5">
+          <h3 className="font-semibold text-base-content">Skills</h3>
+
+          {skills.length === 0 ? (
+            <p className="text-base-content/60 text-sm mt-1">No skills added yet.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2 mt-2 justify-center">
+              {skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="badge badge-primary badge-outline px-3 py-2"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Dates */}
+        <div className="mt-6 text-sm text-base-content/70">
+          <p className="flex justify-center items-center gap-2">
+            <FaCalendarAlt /> Joined: {formatDate(createdAt)}
+          </p>
+          <p className="mt-1 flex justify-center items-center gap-2">
+            <FaCalendarAlt /> Updated: {formatDate(updatedAt)}
+          </p>
+
+        </div>
+          <button onClick={handleEditClick} className="btn btn-outline btn-success">Edit</button>   
+      </div>
+      
+    </div>
+  );
+};
+
+export default Profile;
