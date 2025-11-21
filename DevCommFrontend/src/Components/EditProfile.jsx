@@ -69,7 +69,7 @@ const EditProfile = () => {
     setIsSubmitting(true); 
 
     try {
-      const res = await axios.put(BASE_URL + '/profile/edit', form, {
+      const res = await axios.put(BASE_URL + 'profile/edit', form, {
         withCredentials: true,
       });
       dispatch(addUserInfo(res.data.user));
