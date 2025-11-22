@@ -20,7 +20,7 @@ export default function Login() {
     e.preventDefault();
    try {
     setError("")
-    const res = await axios.post(BASE_URL+'/login',{
+    const res = await axios.post(BASE_URL+'login',{
       email,
       password
     },{
@@ -36,7 +36,7 @@ export default function Login() {
   const handleSignUp = async(e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(BASE_URL+'/signup',{
+      const res = await axios.post(BASE_URL+'signup',{
         firstName,
         lastName,
         email,

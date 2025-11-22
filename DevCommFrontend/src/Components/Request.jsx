@@ -12,7 +12,7 @@ function Request() {
 
     const reviewRequest=async(status,_id)=>{
       try {
-         await axios.post(BASE_URL+"/request/review/"+status+"/"+_id,{},{withCredentials:true})
+         await axios.post(BASE_URL+"request/review/"+status+"/"+_id,{},{withCredentials:true})
         dispatch(removeRequest(_id))
       } catch (error) {
         console.log("review request error"+error)
@@ -21,7 +21,7 @@ function Request() {
 
     const fetchReq = async()=>{
        try {
-         const res = await axios.get(BASE_URL+"/users/requests/received",{withCredentials:true})
+         const res = await axios.get(BASE_URL+"users/requests/received",{withCredentials:true})
          console.log(res.data.data,"reqdata")
         dispatch(addRequest(res.data.data))
 

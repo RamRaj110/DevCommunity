@@ -17,9 +17,9 @@ const Body = () => {
     if (userData) return;
     
     try {
-      const res = await axios.get(BASE_URL + '/profile/view', { withCredentials: true });
-      dispatch(addUserInfo(res.data));
-      
+     const res = await axios.get(BASE_URL+'/profile/view',
+      {withCredentials:true})
+      dispatch(addUserInfo(res.data))
     } catch (error) {
       // ONLY redirect if the user is NOT on the Login or Home page
       if (error.response && error.response.status === 401) {

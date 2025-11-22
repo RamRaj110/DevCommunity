@@ -20,7 +20,7 @@ const UserCard = ({user})=> {
 
   const handleSendReq= async(status,_id)=>{
     try {
-      await axios.post(BASE_URL+"/request/send/"+status+"/"+_id,{},{withCredentials:true})
+      await axios.post(BASE_URL+"request/send/"+status+"/"+_id,{},{withCredentials:true})
    dispatch(removeFeed(_id))
     } catch (error) {
       console.log("send req error"+error)
