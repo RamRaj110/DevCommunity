@@ -24,7 +24,9 @@ const NavBar = () => {
     <div>
       <div className="navbar bg-base-300 shadow-sm">
   <div className="flex-1">
-    <Link to='/feed' className="btn btn-ghost text-xl">DevCommunity</Link>
+    <Link to='/feed' className="btn btn-ghost text-xl">
+    <img className='w-20 h-20' src="../src/Img/codepairImgcopy.png" alt="logo" />
+    </Link>
   </div>
   <div className="flex gap-2">
   {!user && <Link to='/login'>

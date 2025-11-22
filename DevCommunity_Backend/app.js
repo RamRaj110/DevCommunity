@@ -10,8 +10,8 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173', 
-  // origin:'https://super-space-umbrella-9455pg79x9xhxgj6-3000.app.github.dev',
+  // origin: 'http://localhost:5173', 
+  origin:'https://effective-space-guide-49vvxpj7pv7hw4v-5173.app.github.dev',
   credentials: true, 
   methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 

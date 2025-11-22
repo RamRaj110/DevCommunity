@@ -9,6 +9,7 @@ import Feed from "./Components/Feed"
 import EditProfile from "./Components/EditProfile"
 import Connections from './Components/Connections'
 import Request from './Components/Request'
+import Hero from "./Components/Home"
 
 
 
@@ -20,6 +21,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Body />}>
+            <Route path="/" element={<Hero />} />
               <Route path="/login" element={<Login />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/profile" element={<Profile />} />
