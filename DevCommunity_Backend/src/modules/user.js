@@ -78,7 +78,7 @@ userSchema.methods.validatePasswrd= async function name(passwrdByuser) {
   return isPasswrdValid
 }
 
-// const User = mongoose.model("UserData", userSchema);//for remote 
-const User = mongoose.model("User", userSchema);//for local
+const User = mongoose.model("User", userSchema);//for remote 
+// const User = mongoose.model("User", userSchema);//for local
 
 module.exports = User;

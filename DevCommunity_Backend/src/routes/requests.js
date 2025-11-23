@@ -13,7 +13,7 @@ requestRouter.post(
       const toUserId = req.params.toUserId;
       const status = req.params.status;
 
-      const allowedStatus = ["intrested", "ignore"];
+      const allowedStatus = ["interested", "ignored"];
       if (!allowedStatus.includes(status)) {
         return res
           .status(400)
@@ -51,7 +51,7 @@ requestRouter.post(
         data,
       });
     } catch (err) {
-      res.status(400).send("Error something is wrong.", err.message);
+      res.status(400).send("Error something is wrong.", err);
     }
   }
 );
@@ -71,7 +71,7 @@ requestRouter.post(
       const connectionRequest = await ConnetionRequest.findOne({
         _id: requestId,
         toUserId: loggedInUser._id,
-        status: "intrested",
+        status: "interested",
       });
       if (!connectionRequest) {
         return res.status(404).json({

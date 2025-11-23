@@ -27,7 +27,7 @@ const Hero = () => {
         {/* Hero Headline */}
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl mb-6">
           <span className="block text-white">Code. Connect.</span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 pb-4">
             Create Together.
           </span>
         </h1>

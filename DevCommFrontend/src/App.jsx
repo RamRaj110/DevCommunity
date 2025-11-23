@@ -10,6 +10,7 @@ import EditProfile from "./Components/EditProfile"
 import Connections from './Components/Connections'
 import Request from './Components/Request'
 import Hero from "./Components/Home"
+import ProtectedRoute from "./Components/ProtectedRoute"
 
 
 
@@ -21,14 +22,33 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Body />}>
-            <Route path="/" element={<Hero />} />
+              <Route path="/" element={<Hero />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/feed" element={<Feed />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/edit" element={<EditProfile />} />
-              <Route path="/connections" element={<Connections/>}/>
-              <Route path="/requests" element={<Request/>}/>
-              <Route path="/login" element={<Login />} />
+              <Route path="/feed" element={
+                <ProtectedRoute>
+                  <Feed />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/edit" element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              } />
+              <Route path="/connections" element={
+                <ProtectedRoute>
+                  <Connections/>
+                </ProtectedRoute>
+              }/>
+              <Route path="/requests" element={
+                <ProtectedRoute>
+                  <Request/>
+                </ProtectedRoute>
+              }/>
             </Route>
           </Routes>
         </BrowserRouter>
