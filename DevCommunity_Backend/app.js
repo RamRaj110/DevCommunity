@@ -10,9 +10,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  // origin: 'http://localhost:5173', 
-  // origin:'https://effective-space-guide-49vvxpj7pv7hw4v-3000.app.github.dev/',
-  origin:"http://ec2-3-106-130-58.ap-southeast-2.compute.amazonaws.com",
+  origin: "*",
   credentials: true, 
   methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
