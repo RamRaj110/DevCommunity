@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import { BASE_URL } from '../utils/constants'
 import axios from 'axios'
 import { removeUserInfo } from '../utils/userSlice'
+import logo from '../Img/codepairImgcopy.png'
 
 const NavBar = () => {
   const user = useSelector((state) => state.userInfo.userInfo)
@@ -31,7 +32,7 @@ const NavBar = () => {
           <Link to={user ? '/feed' : '/'} className="  normal-case gap-3 pl-0">
             <img 
               className='w-18 h-18 rounded-lg object-cover ' 
-              src="../src/Img/codepairImgcopy.png" 
+              src={logo}
               alt="logo" 
               onError={(e) => {e.target.style.display='none'}} 
             />
