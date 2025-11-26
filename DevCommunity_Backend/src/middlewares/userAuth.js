@@ -11,7 +11,7 @@ const userAuth = async(req, res,next)=>{
     }
         let decodedObj;
         try{
-            decodedObj = await jwt.verify(token,'Pawan@Dev')
+            decodedObj = await jwt.verify(token,process.env.JWT_SECRET)
         }catch(verifyErr){
             return res.status(401).send('Unauthorized: Invalid or expired token')
         }

@@ -8,17 +8,9 @@ const userRouter = require('./src/routes/user');
 const cors = require('cors');
 
 const app = express();
-
-// when behind a reverse proxy (nginx) express should trust the proxy
-// so secure cookies and req.protocol reflect the original request
 app.set('trust proxy', 1);
 
-// app.use(cors({
-//   origin: "*",
-//   credentials: true, 
-//   methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], 
-//   allowedHeaders: ['Content-Type', 'Authorization'], 
-// }))
+
 app.use(cors({
    origin: ["http://localhost:3000", "http://3.106.130.58","https://effective-space-guide-49vvxpj7pv7hw4v-3000.app.github.dev/"],
   credentials: true,
@@ -38,7 +30,7 @@ app.use('/',userRouter)
 
 connectDb().then(()=>{
   console.log('Database connected sucessfully.')
-app.listen(3000, () => {
+app.listen( 3000 , () => {
   console.log('Server is running on port 3000');    
 });
 }).catch((err)=>{
