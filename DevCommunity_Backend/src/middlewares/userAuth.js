@@ -4,20 +4,29 @@ const User = require('../modules/user')
 const userAuth = async(req, res,next)=>{
    
   try{  const cookies = req.cookies
+        console.log('userAuth - incoming cookies:', cookies)
     const {token} = cookies;
     if(!token){
        return  res.status(401).send('Unauthorized: Please login first...')
        
     }
-    const decodedObj = await jwt.verify(token,'Pawan@Dev')
+        let decodedObj;
+        try{
+            decodedObj = await jwt.verify(token,'Pawan@Dev')
+            console.log('userAuth - decoded token:', decodedObj)
+        }catch(verifyErr){
+            console.error('userAuth - jwt.verify error:', verifyErr && verifyErr.message)
+            return res.status(401).send('Unauthorized: Invalid or expired token')
+        }
 
-    const {_id}=decodedObj
-    const user = await User.findById(_id);
-    if(!user){
-        throw new Error('user not found')
-    }
-    req.user = user
-    next();
+        const {_id}=decodedObj
+        const user = await User.findById(_id);
+        console.log('userAuth - user lookup result:', !!user, user?._id)
+        if(!user){
+                return res.status(401).send('Unauthorized: user not found')
+        }
+        req.user = user
+        next();
 
 }catch(err){
         res.status(400).send('ERROR: '+ err.message)

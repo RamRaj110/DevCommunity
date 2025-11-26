@@ -9,6 +9,10 @@ const cors = require('cors');
 
 const app = express();
 
+// when behind a reverse proxy (nginx) express should trust the proxy
+// so secure cookies and req.protocol reflect the original request
+app.set('trust proxy', 1);
+
 // app.use(cors({
 //   origin: "*",
 //   credentials: true, 
@@ -16,7 +20,7 @@ const app = express();
 //   allowedHeaders: ['Content-Type', 'Authorization'], 
 // }))
 app.use(cors({
-   origin: ["http://localhost:3000", "http://3.106.130.58"],
+   origin: ["http://localhost:3000", "http://3.106.130.58","https://effective-space-guide-49vvxpj7pv7hw4v-3000.app.github.dev/"],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

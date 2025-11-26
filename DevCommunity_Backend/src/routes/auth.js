@@ -32,12 +32,16 @@ authRouter.post("/signup", async (req, res) => {
     const savedUser = await user.save();
     const token = await savedUser.getJWT();
 
-    res.cookie("token", token, {
+    const isProd = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      expires: new Date(Date.now() + 8 * 3600000),
-    });
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
+      path: '/',
+      maxAge: 8 * 3600000,
+    };
+
+    res.cookie("token", token, cookieOptions);
 
     res.json({ message: "User created successfully.", user: savedUser });
   } catch (err) {
@@ -58,12 +62,16 @@ authRouter.post("/login", async (req, res) => {
       } else {
         const token = await user.getJWT();
 
-        res.cookie("token", token, {
+        const isProd = process.env.NODE_ENV === 'production';
+        const cookieOptions = {
           httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          expires: new Date(Date.now() + 8 * 3600000),
-        });
+          secure: isProd,
+          sameSite: isProd ? 'none' : 'lax',
+          path: '/',
+          maxAge: 8 * 3600000,
+        };
+
+        res.cookie("token", token, cookieOptions);
         res.json({ user });
       }
     }
