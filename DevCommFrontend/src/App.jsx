@@ -11,6 +11,7 @@ import Connections from './Components/Connections'
 import Request from './Components/Request'
 import Hero from "./Components/Home"
 import ProtectedRoute from "./Components/ProtectedRoute"
+import Error from "./Components/Error"
 
 
 
@@ -41,14 +42,15 @@ function App() {
               } />
               <Route path="/connections" element={
                 <ProtectedRoute>
-                  <Connections/>
+                  <Connections />
                 </ProtectedRoute>
               }/>
               <Route path="/requests" element={
                 <ProtectedRoute>
                   <Request/>
                 </ProtectedRoute>
-              }/>
+              } />
+              <Route path="*" element={<Error />} /> 
             </Route>
           </Routes>
         </BrowserRouter>
