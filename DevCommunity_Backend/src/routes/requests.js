@@ -3,6 +3,8 @@ const userAuth = require("../middlewares/userAuth");
 const ConnetionRequest = require("../modules/connectionReq");
 const User = require("../modules/user");
 const requestRouter = express.Router();
+const sendEmails = require("../utils/sendEmails");
+
 
 requestRouter.post(
   "/request/send/:status/:toUserId",
@@ -46,6 +48,14 @@ requestRouter.post(
       
 
       const data = await connectionRequest.save();
+      // Send email notification to the toUser
+      const emaireq = await sendEmails.run()
+      console.log("Email sent result:", emaireq);
+
+
+
+
+
       res.json({
         message: req.user.firstName + " is " + status + ", " + toUser.firstName,
         data,
