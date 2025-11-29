@@ -1,4 +1,4 @@
-import  { useEffect, } from "react"; 
+import  { useEffect, useRef, } from "react"; 
 import { createSocketConnection } from "../utils/socket";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -6,17 +6,46 @@ import { useParams } from "react-router-dom";
 
 const Chat = () => {
 
-    const {targetUserId}=useParams();
+    const {id:targetUserId}=useParams();
     const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState("");
       const user = useSelector((state) => state.userInfo.userInfo);
     const userId = user ? user?._id : null;
-
+    console.log("firstName",user.firstName);
+ 
+  const messagesEndRef = useRef(null);
 
     useEffect(() => {
+        if(!userId || !targetUserId) return;
         const socket =  createSocketConnection()
-        socket.emit('joinChat',{ userId, targetUserId  });
-    }, []);
+        socket.emit('joinChat',{ firstName:user.firstName,userId, targetUserId  });
 
+        return () => {
+            socket.disconnect();
+        };
+    }, [ userId, targetUserId ]);
+
+// Handle Sending Message
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+
+    const socket =  createSocketConnection()
+
+    socket.emit('sendMessage', {
+        firstName: user.firstName,
+        userId,
+        targetUserId,
+        text: newMessage,
+    });
+    
+  }
+
+  const displayUser =  {
+      firstName: "Mira",
+      lastName: "Murati",
+      profileImg: "https://upload.wikimedia.org/wikipedia/commons/5/56/Mira_Murati_2023.jpg",
+      status: "Online"
+  };
 
   return (
     <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl overflow-hidden mt-10">
@@ -100,7 +129,7 @@ const Chat = () => {
         <button 
             type="submit" 
             className="btn btn-circle bg-blue-600 hover:bg-blue-500 border-none text-white shadow-lg shadow-blue-600/20"
-            disabled={!newMessage.trim()}
+            
         >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
