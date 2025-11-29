@@ -3,6 +3,7 @@ import { BASE_URL } from '../utils/constants'
 import axios from 'axios' 
 import { useDispatch, useSelector } from 'react-redux' 
 import { addConnection } from '../utils/connectionSlice' 
+import { Link } from 'react-router-dom'
 
 
 
@@ -106,6 +107,7 @@ const Connections = () => {
 
                 {/* Footer: Action Buttons */}
                 <div className="mt-auto border-t border-slate-800 pt-4 flex gap-3">
+                  <Link to={`/chat/${item._id}`} className="flex-1">
                      <button className="flex-1 btn btn-sm bg-blue-600 hover:bg-blue-500 border-none text-white rounded-lg gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -113,9 +115,11 @@ const Connections = () => {
                         </svg>
                         Message
                      </button>
+                    </Link>
                      <button className="btn btn-sm btn-ghost text-slate-400 hover:text-white rounded-lg">
                         View Profile
                      </button>
+                    
                 </div>
               </div>
             ))}
