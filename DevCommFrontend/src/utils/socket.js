@@ -3,5 +3,9 @@ import { BASE_URL } from './constants.js';
 
 
 export const createSocketConnection = ()=>{
+    if(location.hostname === "localhost"){
     return io(BASE_URL)
+}else{
+return io("/api",{path:"/api/socket.io"})
+}
 }

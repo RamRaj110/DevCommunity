@@ -3,29 +3,68 @@ import { createSocketConnection } from "../utils/socket";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
+import axios from "axios";
 
 const Chat = () => {
 
     const {id:targetUserId}=useParams();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
-      const user = useSelector((state) => state.userInfo.userInfo);
+    const [targetUser, setTargetUser] = useState('');
+    const user = useSelector((state) => state.userInfo.userInfo);
+    console.log(user)
     const userId = user ? user?._id : null;
-    console.log("firstName",user.firstName);
  
   const messagesEndRef = useRef(null);
+  const chatData = async () => {
+    try {
+        const res = await axios.get(BASE_URL+"chat/"+targetUserId,{
+            withCredentials:true
+        });
+          const firstMsg = res.data.messages[0];
+    if (firstMsg) {
+      const sender = firstMsg.sender;
+
+      // If sender is NOT the logged user → that's the target user
+      if (sender._id !== userId) {
+        setTargetUser(sender);
+      }
+    }
+        const formattedMessages = res.data.messages.map((msg) => ({
+            key: msg._id,
+            _id: msg._id,
+            firstName: msg.sender.firstName,
+            text: msg.text,
+            time: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            sender: msg.sender._id === userId ? "me" : "them",
+        }));
+       
+        setMessages(formattedMessages);
+
+    } catch (error) {
+        console.log("eror in chat",error)
+    }
+  }
+  useEffect(() => {
+    chatData();
+    }, []);
+
 
     useEffect(() => {
         if(!userId || !targetUserId) return;
         const socket =  createSocketConnection()
         socket.emit('joinChat',{ firstName:user.firstName,userId, targetUserId  });
+        socket.on('receiveMessage', (messageData) => {
+            setMessages((prevMessages) => [...prevMessages, { ...messageData, sender: messageData.userId === userId ? "me" : "them" }]);
+        });
+
 
         return () => {
             socket.disconnect();
         };
     }, [ userId, targetUserId ]);
 
-// Handle Sending Message
   const handleSendMessage = (e) => {
     e.preventDefault();
 
@@ -37,15 +76,10 @@ const Chat = () => {
         targetUserId,
         text: newMessage,
     });
-    
+    setNewMessage("");
   }
 
-  const displayUser =  {
-      firstName: "Mira",
-      lastName: "Murati",
-      profileImg: "https://upload.wikimedia.org/wikipedia/commons/5/56/Mira_Murati_2023.jpg",
-      status: "Online"
-  };
+ 
 
   return (
     <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl overflow-hidden mt-10">
@@ -54,13 +88,13 @@ const Chat = () => {
         <div className="flex items-center gap-4">
             <div className="relative">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-slate-700">
-                    <img src={displayUser.profileImg} alt="user" className="w-full h-full object-cover" />
+                    <img src={targetUser?.profileImg} alt="user" className="w-full h-full object-cover" />
                 </div>
                 {/* Online Status Dot */}
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-slate-900 rounded-full"></span>
             </div>
             <div>
-                <h3 className="text-white font-bold text-lg">{displayUser.firstName} {displayUser.lastName}</h3>
+                <h3 className="text-white font-bold text-lg">{targetUser?.firstName} {targetUser?.lastName}</h3>
                 <p className="text-xs text-blue-400 font-medium flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></span>
                     Online
@@ -85,7 +119,7 @@ const Chat = () => {
                 {msg.sender === "them" && (
                     <div className="chat-image avatar">
                         <div className="w-10 rounded-full">
-                        <img alt="User" src={displayUser.profileImg} />
+                        <img alt="User" src={targetUser.profileImg} />
                         </div>
                     </div>
                 )}
