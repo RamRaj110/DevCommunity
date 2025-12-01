@@ -15,8 +15,11 @@ const app = express();
 app.set('trust proxy', 1);
 
 
+// const FRONTEND_URL = "https://effective-space-guide-49vvxpj7pv7hw4v-5173.app.github.dev";
+
 app.use(cors({
-   origin: ["http://localhost:3000", "http://localhost:5173", "http://3.106.130.58","https://effective-space-guide-49vvxpj7pv7hw4v-3000.app.github.dev/"],
+   origin: ["http://localhost:3000", "http://localhost:5173", "http://3.106.130.58",],
+    // origin: FRONTEND_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
