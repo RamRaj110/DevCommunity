@@ -14,7 +14,7 @@ const secreteRoomId = (userId,targetUserId) => {
 const initializeSocket = (server) => {
     // const FRONTEND_URL = "https://effective-space-guide-49vvxpj7pv7hw4v-5173.app.github.dev";
     const io = socketIO(server, {
-        path: '/api/socket.io',
+        // path: '/api/socket.io',
         cors: {
             origin: ["http://localhost:3000", "http://localhost:5173","http://3.106.130.58"],
             // origin: FRONTEND_URL,
