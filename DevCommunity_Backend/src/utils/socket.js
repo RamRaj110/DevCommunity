@@ -17,7 +17,7 @@ const initializeSocket = (server) => {
         path: '/api/socket.io',
         cors: {
             origin: ["http://localhost:3000", "http://localhost:5173","http://3.106.130.58"],
-            origin: FRONTEND_URL,
+            // origin: FRONTEND_URL,
             methods: ["GET", "POST"],
             credentials: true
         }

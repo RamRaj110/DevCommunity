@@ -7,7 +7,7 @@ export const createSocketConnection = () => {
   } else {
     // same-origin with backend proxied at /api
     return io(window.location.origin, {
-      path: "/api/socket.io",
+      path: "/socket.io/",
       withCredentials: true,
       transports: ["websocket", "polling"],
     });
