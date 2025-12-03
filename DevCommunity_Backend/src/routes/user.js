@@ -78,4 +78,16 @@ userRouter.get('/feed',userAuth,async(req,res)=>{
   }
 })
 
+// Get single user by id (safe fields)
+userRouter.get('/users/:id', userAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select(USER_SAFE_DATA);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ user });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = userRouter;

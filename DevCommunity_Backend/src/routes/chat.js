@@ -9,10 +9,10 @@ chatRouter.get('/chat/:targetUserId',userAuth, async (req, res) => {
         const userId = req.user._id;
         let chat = await Chat.findOne({
             participants: { $all: [userId, targetUserId] }
-        }).populate('messages.sender', 'firstName lastName profilePicture');
+        }).populate('messages.sender', 'firstName lastName profileImg');
 
         if(!chat){
-            chat = new chat({ participants: [userId, targetUserId], messages: [] });
+            chat = new Chat({ participants: [userId, targetUserId], messages: [] });
             await chat.save();
         }
         res.status(200).json(chat);

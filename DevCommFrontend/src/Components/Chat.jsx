@@ -13,42 +13,60 @@ const Chat = () => {
     const [newMessage, setNewMessage] = useState("");
     const [targetUser, setTargetUser] = useState('');
     const user = useSelector((state) => state.userInfo.userInfo);
-    console.log(user)
+    
     const userId = user ? user?._id : null;
  
   const messagesEndRef = useRef(null);
-  const chatData = async () => {
+const chatData = async () => {
     try {
-        const res = await axios.get(BASE_URL+"chat/"+targetUserId,{
-            withCredentials:true
+        const res = await axios.get(BASE_URL + "chat/" + targetUserId, {
+            withCredentials: true
         });
-          const firstMsg = res.data.messages[0];
-    if (firstMsg) {
-      const sender = firstMsg.sender;
-
-      // If sender is NOT the logged user → that's the target user
-      if (sender._id !== userId) {
-        setTargetUser(sender);
-      }
-    }
+        
+        const targetUserData = res.data.messages.find((msg) => {
+            return msg.sender._id !== userId; 
+        })?.sender; 
+        
+        if (targetUserData) {
+            setTargetUser(targetUserData);
+        }
+        
+        // Format messages
         const formattedMessages = res.data.messages.map((msg) => ({
             key: msg._id,
             _id: msg._id,
             firstName: msg.sender.firstName,
             text: msg.text,
-            time: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            time: new Date(msg.createdAt).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            }),
             sender: msg.sender._id === userId ? "me" : "them",
         }));
        
         setMessages(formattedMessages);
 
     } catch (error) {
-        console.log("eror in chat",error)
+        console.log("Error in chat", error);
     }
-  }
-  useEffect(() => {
+}
+
+const fetchTargetUser = async () => {
+    if (!targetUserId) return;
+    try {
+        const res = await axios.get(`${BASE_URL}users/${targetUserId}`, { withCredentials: true });
+        const userData = res.data.user ?? res.data;
+        if (userData) setTargetUser(userData);
+    } catch (err) {
+        console.log("Failed to fetch target user", err);
+    }
+}
+
+useEffect(() => {
+    if (!targetUserId) return;
     chatData();
-    }, []);
+    fetchTargetUser();
+}, [targetUserId, userId]);
 
 
     useEffect(() => {
@@ -64,6 +82,11 @@ const Chat = () => {
             socket.disconnect();
         };
     }, [ userId, targetUserId ]);
+
+// auto-scroll to bottom when messages change
+useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [messages]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -82,8 +105,15 @@ const Chat = () => {
  
 
   return (
-    <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl overflow-hidden mt-10">
+    <>  <div className="min-h-screen bg-slate-950 flex justify-center items-center p-4 relative overflow-hidden">
       
+      {/* Background Effects */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+        <div className="absolute top-10 right-10 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 animate-pulse"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10"></div>
+      </div>
+    <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl overflow-hidden mt-10">
+         
       <div className="bg-slate-950/80 p-4 border-b border-slate-800 flex items-center justify-between z-10">
         <div className="flex items-center gap-4">
             <div className="relative">
@@ -119,7 +149,7 @@ const Chat = () => {
                 {msg.sender === "them" && (
                     <div className="chat-image avatar">
                         <div className="w-10 rounded-full">
-                        <img alt="User" src={targetUser.profileImg} />
+                        <img alt="User" src={targetUser?.profileImg} />
                         </div>
                     </div>
                 )}
@@ -172,6 +202,8 @@ const Chat = () => {
       </form>
 
     </div>
+    </div>
+    </>
   );
 };
 
