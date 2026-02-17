@@ -22,7 +22,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:5173",
       "http://3.106.130.58",
-      "https://dev-community-seven.vercel.app/",
+      "https://dev-community-seven.vercel.app",
     ],
     // origin: FRONTEND_URL,
     credentials: true,
